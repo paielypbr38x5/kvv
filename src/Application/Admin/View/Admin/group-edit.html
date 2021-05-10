@@ -1,0 +1,95 @@
+﻿<extend name="./_base"/>
+<block name="css"></block>
+<block name="header"></block>
+<block name="menu"></block>
+<block name="content">
+	<article class="page-container">
+		<form action="" method="post" class="form form-horizontal" id="form-group">
+			<div class="row cl">
+				<!--<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>ID：</label>-->
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="hidden" class="input-text" value="{$GroupData.id}" name="id" datatype="*4-16">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>权限组名称：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value="{$GroupData.title}" placeholder="" id="roleName" name="title" datatype="*4-16">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">权限节点：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+
+					<volist name="Rules" id="Rule">
+						<dl class="permission-list">
+							<dt>
+								<label>
+									<input type="checkbox" value="{$Rule.id}" name="rules[]">
+									{$Rule.title}</label>
+							</dt>
+
+							<dd>
+										<volist name="Rule['children']" id="children">
+												<li style="width: 200px;display: inline-block">
+
+												<label class="mr-30">
+													<input type="checkbox" value="{$children.id}" name="rules[]">
+													{$children.title}
+												</label>
+
+											</li>
+
+				</volist>
+
+							</dd>
+						</dl>
+					</volist>
+
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+					<button type="submit" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+				</div>
+			</div>
+		</form>
+	</article>
+
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+		$(function(){
+			var postData={};
+			$(".permission-list dt input:checkbox").click(function(){
+				$(this).closest("dl").find("dd input:checkbox").prop({"checked":$(this).prop("checked"),"name":""});
+			});
+			$(".permission-list dd input:checkbox").click(function(){
+				if(!$(this).is(":checked")){
+					$(this).closest("dl").find("dd input:checkbox").prop("name","rules[]");
+					$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+				}else {
+					$(this).closest("dl").find("dd input:checkbox").prop("name","rules[]");
+				}
+			});
+
+
+			$("#form-group").submit(function () {
+
+				$.post("",$(this).serialize(),function (result) {
+					if (result.status==1){
+						layer.alert(result.info,{icon:1},function () {
+							parent.location.reload();
+						})
+					}else {
+						layer.alert(result.info,{icon:5})
+					}
+				},"json");
+				return false;
+			})
+
+		});
+	</script>
+
+</block>

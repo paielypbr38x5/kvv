@@ -1,0 +1,159 @@
+﻿<extend name="./_base"/>
+<block name="css">
+
+</block>
+<block name="content">
+    <section class="Hui-article-box">
+
+        <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 数据管理 <span
+                class="c-gray en">&gt;</span> 数据列表 <a class="btn btn-success radius r"
+                                                       style="line-height:1.6em;margin-top:3px"
+                                                       href="javascript:location.reload();" title="刷新"><i
+                class="Hui-iconfont">&#xe68f;</i></a></nav>
+        <div class="page-container">
+            <div class="text-c">
+                <form class="Huiform" method="post" action="" target="_self">
+                    <input type="text" class="input-text" style="width:250px" placeholder="输入用户名称" name="search">
+                    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+                </form>
+            </div>
+            <div class="cl pd-5 bg-1 bk-gray mt-20 mb-20"><span class="l"><a href="javascript:;" onclick="datadel()"
+                                                                       class="btn btn-danger radius"><i
+                    class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a
+                    href="javascript:;" onclick="add()"
+                    class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加新记录</a></span></div>
+            <table id="data-list" class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="9">员工列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th width="25"><input type="checkbox" name="" value=""></th>
+                    <th width="40">ID</th>
+                    <th width="150">游戏</th>
+                    <th width="150">游戏ID</th>
+                    <th width="150">掩码</th>
+                    <th width="150">日期</th>
+                    <th width="150">销售</th>
+                    <th width="150">销售笔数</th>
+                    <th width="150">回收</th>
+                    <th width="150">回收笔数</th>
+                    <th width="150">操作</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </section>
+</block>
+
+<block name="script">
+    <script src="__PUBLIC__/Lib/datatables/js/jquery.dataTables.js"></script>
+    <script>
+
+    $('#data-list').dataTable({
+            order: [[1, 'desc']],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: ''
+            },
+            columns: [
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return '<input type="checkbox" name="id" value="' + data + '">'
+                    },
+                    className: 'text-c',
+                    orderable: false
+                },
+                {
+                    data: 'id',
+                    className: 'text-c',
+                },
+                {data: 'game'},
+                {data: 'game_user'},
+                {data: 'mask'},
+                {data: 'date'},
+                {data: 'sell'},
+                {data: 'sell_count'},
+                {data: 'recycle'},
+                {data: 'recycle_count'},
+                {
+                    render: function (data, type, row, meta) {
+                        var render='';
+                        render += '<a class="ml-5 edit" href="javascript:void(0);" onclick="edit(' + row.id + ')" title="修改信息"><i class="Hui-iconfont Hui-iconfont-edit"></i></a>';
+
+                        render += '<a class="ml-5" href="javascript:void(0);" onclick="del(' + row.id + ')" title="删除"><i class="Hui-iconfont Hui-iconfont-del3"></i></a>';
+//                        render += '<a class="ml-5" href="javascript:void(0);" onclick="show_rate(' + row.id + ')" title="查看操作日志"><i class="Hui-iconfont Hui-iconfont-log"></i></a>';
+                        return render;
+
+                    },
+                    "orderable": false,
+                    "className": "text-c"
+                }
+            ]
+
+        })
+
+        function del (id) {
+            send(id, 'del')
+        }
+        //启用
+        function start(id) {
+            send(id, 'start')
+        }
+        //停用
+        function stop(id) {
+            send(id, 'stop')
+        }
+        //执行
+       function send(id, status) {
+            $.ajax({
+                type: 'GET',
+                url: '{:U(userStatus)}',
+                data: {id:id,status:status},
+                dataType: 'json',
+                success: function (result) {
+                    if (result.status == 1) {
+                        layer.alert(result.info, {icon: 6}, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(result.info, {icon: 5});
+                    }
+                }
+
+            })
+        }
+       function remove(id) {
+            $.ajax({
+                type: 'GET',
+                url: '{:U(userStatus)}',
+                data: {id:id,status:status},
+                dataType: 'json',
+                success: function (result) {
+                    if (result.status == 1) {
+                        layer.alert(result.info, {icon: 6}, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(result.info, {icon: 5});
+                    }
+                }
+
+            })
+        }
+
+
+        function add(title, url, w, h) {
+            layer_show("添加", '{:U(dataEdit)}' , 480, 600);
+        }
+        function edit($id) {
+            layer_show("修改", '{:U(dataEdit)}?id='+$id , 480, 600);
+        }
+
+    </script>
+</block>
+
+
+

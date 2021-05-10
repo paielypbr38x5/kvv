@@ -1,0 +1,79 @@
+<extend name="./_base"/>
+<block name="css">
+
+</block>
+<block name="header">
+
+</block>
+<block name="menu">
+
+</block>
+<block name="content">
+	<article class="page-container">
+		<form class="form form-horizontal" id="form-rule">
+			<div class="row cl">
+				<!--<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>ID：</label>-->
+				<div class="formControls col-xs-6">
+					<input type="hidden" class="input-text" value="{$RuleData.id}" placeholder="" id="id" name="id">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>权限名称：</label>
+				<div class="formControls col-xs-6">
+					<input type="text" class="input-text validate[required]" value="{$RuleData.title}" placeholder="" id="title" name="title">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>权限规则：</label>
+				<div class="formControls col-xs-6">
+					<input type="text" class="input-text validate[required]" autocomplete="off" value="{$RuleData.name}" placeholder="" id="name" name="name">
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-6 col-xs-offset-3">
+					<input class="btn btn-primary btn-block radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</article>
+
+</block>
+
+<block name="script">
+
+	<script type="text/javascript">
+		$(function(){
+
+			$('#form-admin-add').validationEngine();
+
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+
+			var flag=true;
+
+			$('#form-rule').submit(function () {
+				if ($(this).validationEngine('validate')){
+					if (!flag){
+						return false;
+					}
+					flag=false;
+					$.post("",$(this).serialize(),function (result) {
+						if(result.status==1){
+							layer.alert(result.info,{icon:6},function () {
+								parent.location.reload();
+							})
+						}else {
+							layer.alert(result.info,{icon:5})
+						}
+						flag=true;
+					},"json");
+				}
+				return false;
+			});
+		});
+	</script>
+
+</block>

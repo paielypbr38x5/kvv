@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <!--_meta 作为公共模版分离出去-->
+    <block name="footer">
+        <include file="./_meta"/>
+    </block>
+    <!--/meta 作为公共模版分离出去-->
+
+    <!--附加CSS样式-->
+    <block name="css">
+
+    </block>
+    <!--附加CSS样式-->
+
+    <block name="seo">
+        <title>Kvv科技-3099数据查询平台</title>
+        <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+        <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+    </block>
+
+</head>
+<body>
+<!--_header 作为公共模版分离出去-->
+<block name="header">
+
+</block>
+<!--/_header 作为公共模版分离出去-->
+
+<!--_menu 作为公共模版分离出去-->
+<block name="menu">
+</block>
+
+
+<block name="content">
+
+</block>
+
+<block name="footer">
+    <include file="./_footer"/>
+</block>
+
+<!--请在下方写此页面业务相关的脚本-->
+<block name="script">
+    <script type="text/javascript">
+        console.log('执行。。。');
+    </script>
+</block>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

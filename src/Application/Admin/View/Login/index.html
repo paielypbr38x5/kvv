@@ -1,0 +1,68 @@
+<extend name="./_base"/>
+<block name="css">
+    <link href="__PUBLIC__/Lib/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header"></block>
+<block name="menu"></block>
+<block name="content">
+    <input type="hidden" id="TenantId" name="TenantId" value=""/>
+    <div class="header"></div>
+    <div class="loginWraper">
+        <div id="loginform" class="loginBox">
+            <form class="form form-horizontal" action="{:U('login')}" method="post">
+                <div class="row cl">
+                    <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                    <div class="formControls col-xs-8">
+                        <input id="username" name="username" type="text" placeholder="账户" class="input-text size-L">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                    <div class="formControls col-xs-8">
+                        <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="formControls col-xs-8 col-xs-offset-3">
+                        <input name="verifyImg" class="input-text size-L" type="text" placeholder="验证码"
+                               style="width:150px;">
+                        <img src="{:U(verifyImg)}" width="100" height="40"
+                             onclick="this.src='{:U(verifyImg)}?'+Math.random()"></div>
+                </div>
+                <div class="row cl">
+                    <div class="formControls col-xs-8 col-xs-offset-3" style="visibility: hidden">
+                        <label for="online">
+                            <input type="checkbox" name="online" id="online" value="">
+                            使我保持登录状态</label>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="formControls col-xs-8 col-xs-offset-3">
+                        <input name="" type="submit" class="btn btn-success radius size-L"
+                               value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                        <input name="" type="reset" class="btn btn-default radius size-L"
+                               value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="footer"></div>
+</block>
+
+<block name="script">
+    <script>
+        $('form').submit(function () {
+            $.post($(this).attr('action'), $(this).serialize(), function (result) {
+                if (result.status == 1) {
+                    layer.alert(result.info, {icon:6}, function () {
+                        location.href = "{:U('/Index')}";
+                    })
+                } else {
+                    layer.alert(result.info, {icon:5});
+                }
+            }, "json");
+            return false;
+        })
+    </script>
+</block>

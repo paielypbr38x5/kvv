@@ -1,0 +1,169 @@
+﻿<extend name="./_base"/>
+<block name="css">
+
+</block>
+
+<block name="content">
+    <section class="Hui-article-box">
+
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>
+            首页
+            <span class="c-gray en">&gt;</span>
+            管理员管理
+            <span class="c-gray en">&gt;</span>
+            权限组管理
+            <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+               href="javascript:location.replace(location.href);" title="刷新">
+                <i class="Hui-iconfont">&#xe68f;</i>
+            </a>
+        </nav>
+        <div class="page-container">
+            <div class="cl pd-5 bg-1 bk-gray">
+            <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i
+                    class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+            <a class="btn btn-primary radius" href="javascript:;"
+               onclick="add('添加权限组','{:U(group_edit)}','1000')">
+                <i class="Hui-iconfont">&#xe600;</i> 添加权限组</a>
+            </span>
+                <span class="r">共有数据：<strong>{$GroupList|count}</strong> 条</span>
+            </div>
+            <table id="group-list" class="table table-border table-bordered table-hover table-bg">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="6">权限组管理</th>
+                </tr>
+                <tr class="text-c">
+                    <th width="25"><input type="checkbox" value="" name=""></th>
+                    <th width="40">ID</th>
+                    <th width="200">权限组名称</th>
+                    <th>描述</th>
+                    <th width="70">状态</th>
+                    <th width="70">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+
+            </table>
+        </div>
+    </section>
+</block>
+
+<block name="script">
+    <script src="__PUBLIC__/Lib/datatables/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+
+        $('#group-list').dataTable({
+            order: [[1, 'desc']],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: ''
+            },
+            columns: [
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return '<input type="checkbox" name="id" value="' + data + '">'
+                    },
+                    className: 'text-c',
+                    orderable: false
+                },
+                {
+                    data: 'id',
+                    className: 'text-c',
+                },
+                {data: 'title'},
+                {data: 'rules'},
+                {
+                    data: 'status',
+                    render: function (data, type, row, meta) {
+                        var render;
+                        switch (parseInt(data)) {
+                            case 0:
+                                render = '<label class="label radius">已禁用</label>';
+                                break;
+                            case 1:
+                                render = '<label class="label label-success radius">已启用</label>';
+                                break;
+                            default:
+                                render = '<label class="label label-danger radius">未知状态</label>';
+                                break;
+                        }
+                        return render;
+                    },
+                    className: 'text-c'
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        var render='';
+                        switch (parseInt(row.status)) {
+                            case -1:
+                                render += '<a href="javascript:void(0);" onclick="start(' + row.id + ')" title="启用"><i class="Hui-iconfont Hui-iconfont-shangjia"></i></a>';
+                                break;
+                            case 0:
+                                render += '<a href="javascript:void(0);" onclick="start(' + row.id + ')" title="停用"><i class="Hui-iconfont Hui-iconfont-shangjia"></i></a>';
+                                render += '<a class="ml-5" href="javascript:void(0);" onclick="del(' + row.id + ')" title="删除"><i class="Hui-iconfont Hui-iconfont-del3"></i></a>';
+                                break;
+                            case 1:
+                                render += '<a href="javascript:void(0);" onclick="stop(' + row.id + ')" title="停用"><i class="Hui-iconfont Hui-iconfont-xiajia"></i></a>';
+                                break;
+                        }
+
+                        render+='<a class="ml-5" href="javascript:void(0);" onclick="edit(' + row.id + ')" title="编辑"><i class="Hui-iconfont Hui-iconfont-edit"></i></a>'
+                        return render;
+
+                    },
+                    "orderable": false,
+                    "className": "text-c"
+                }
+            ]
+
+        })
+
+        /*管理员-权限组-添加*/
+        function add() {
+            layer_show('权限组编辑', '{:U(groupEdit)}', 960, 600);
+        }
+        /*管理员-权限组-编辑*/
+        function edit(id) {
+            layer_show('权限组编辑', '{:U(groupEdit)}' + '?id=' + id, 800, 600);
+        }
+
+        function del (id) {
+            send(id, 'del')
+        }
+        //启用
+        function start(id) {
+            send(id, 'start')
+        }
+        //停用
+        function stop(id) {
+            send(id, 'stop')
+        }
+        //执行
+        function send(id, status) {
+            $.ajax({
+                type: 'GET',
+                url: '{:U(groupStatus)}',
+                data: {id:id,status:status},
+                dataType: 'json',
+                success: function (result) {
+                    if (result.status == 1) {
+                        layer.alert(result.info, {icon: 6}, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(result.info, {icon: 5});
+                    }
+                }
+
+            })
+        }
+
+
+    </script>
+
+</block>

@@ -1,0 +1,119 @@
+<extend name="./_base"/>
+<block name="css">
+
+</block>
+
+<block name="header">
+
+</block>
+<block name="menu">
+
+</block>
+
+
+<block name="content">
+	<article class="page-container">
+		<form class="form form-horizontal" id="form-admin-add">
+			<input type="hidden" class="input-text" value="{$Admin.id}" placeholder="" id="id" name="id">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="text" class="input-text validate[required,custom[username]" value="{$Admin.username}" placeholder="" id="username" name="username">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设置密码：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="password" class="input-text validate[custom[password]]" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="password" class="input-text validate[equals[password]]" autocomplete="off"  placeholder="确认新密码" id="confirm" name="confirm">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>QQ号：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="text" class="input-text validate[required,custom[qq]]" value="{$Admin.qq}" placeholder="" id="qq" name="qq">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="text" class="input-text validate[required,custom[phone]]" value="{$Admin.phone}" placeholder="" id="phone" name="phone">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+				<div class="formControls col-xs-6 col-sm-7">
+					<input type="text" class="input-text validate[required,custom[email]]" placeholder="@" name="email" id="email" value="{$Admin.email}">
+				</div>
+			</div>
+
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">权限组：</label>
+				<div class="formControls col-xs-6 col-sm-7 skin-minimal">
+					<volist name="GroupList" id="vo">
+						<div class="check-box">
+							<input type="checkbox" id="checkbox{$vo.id}" name="groups[]" value="{$vo.id}" {$vo.checked}>
+							<label for="checkbox{$vo.id}">{$vo.title}</label>
+						</div>
+					</volist>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">备注：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<textarea name="intro" cols="" rows="" class="textarea"  placeholder="说点什么...100个字符以内" dragonfly="true" onKeyUp="textarealength(this,100)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+					<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</article>
+
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+		$(function(){
+
+			$('#form-admin-add').validationEngine();
+
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+
+			var flag=true;
+
+			$('#form-admin-add').submit(function () {
+				if ($(this).validationEngine('validate')){
+					if (!flag){
+						return false;
+					}
+					flag=false;
+					$.post("",$(this).serialize(),function (result) {
+						if(result.status==1){
+							layer.alert(result.info,{icon:6},function () {
+								location.reload();
+							})
+						}else {
+							layer.alert(result.info,{icon:5})
+						}
+						flag=true;
+					},"json");
+				}
+				return false;
+			});
+		});
+	</script>
+
+</block>

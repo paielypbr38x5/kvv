@@ -1,0 +1,176 @@
+<extend name="./_base"/>
+<block name="css">
+<style>
+    .autocompleter, .autocompleter-hint {
+        position: absolute;
+    }
+    .autocompleter-item:hover {
+        background-color: #edc26a;
+    }
+    .autocompleter {
+        z-index: 100;
+        width: 208px;
+        background-color: #eee;
+    }
+    .autocompleter-show {
+        border: solid 1px #3bb4f2;
+    }
+</style>
+</block>
+<block name="header">
+
+</block>
+<block name="menu">
+
+</block>
+<block name="content">
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-rule">
+            <div class="row cl">
+                <!--<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>ID：</label>-->
+                <div class="formControls col-xs-6">
+                    <input type="hidden" class="input-text" value="{$Data.id}" placeholder="" id="id" name="id">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>日期：</label>
+                <div class="formControls col-xs-6">
+                    <input id="date" class="input-text laydate-icon"  style="height: 30px" name="date" value="{$Data.date}">
+                </div>
+            </div>
+            <!--<div class="row cl">-->
+                <!--<label class="form-label col-xs-3"><span class="c-red">*</span>游戏ID：</label>-->
+                <!--<div class="formControls col-xs-6">-->
+                    <!--<select name="gid" class="input-text">-->
+                        <!--<volist name="UserData" id="vo">-->
+                            <!--<option value="{$vo.id}"-->
+                            <!--<eq name="vo.id" value="$Data['uid']">selected</eq>-->
+                            <!--&gt;{$vo.game} : {$vo.game_user}</option>-->
+                        <!--</volist>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>用户标识：</label>
+                <div class="formControls col-xs-6">
+
+                    <input class="input-text" type="text" name="uid" id="uid" placeholder="请选择游戏ID" maxlength="40" value="{$Data.uid}" disabled readonly/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>游戏ID：</label>
+                <div class="formControls col-xs-6">
+
+                    <input class="input-text" type="text" name="game_user" id="game_user" placeholder="请选择游戏ID" maxlength="40" value="{$Data.game_user}"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>销售总额：</label>
+                <div class="formControls col-xs-6">
+                    <input class="input-text" type="text" name="sell" id="sell" placeholder="销售" maxlength="40" value="{$Data.sell}"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>销售笔数：</label>
+                <div class="formControls col-xs-6">
+                    <input class="input-text" type="text" name="sell_count" id="sell_count" placeholder="请选择游戏ID" maxlength="40" value="{$Data.sell_count}"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>回收总额：</label>
+                <div class="formControls col-xs-6">
+                    <input class="input-text" type="text" name="recycle" id="recycle" placeholder="回收" maxlength="40" value="{$Data.sell}"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><span class="c-red">*</span>回收笔数：</label>
+                <div class="formControls col-xs-6">
+                    <input class="input-text" type="text" name="recycle_count" id="recycle_count" placeholder="回收笔数" maxlength="40" value="{$Data.sell_count}"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <input class="btn btn-primary btn-block radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                </div>
+            </div>
+        </form>
+    </article>
+
+</block>
+
+<block name="script">
+
+    <script src="__PUBLIC__/Lib/jquery.autocompleter.js"></script>
+    <script>
+        /**
+         * Crayola colors in JSON format
+         * from: https://gist.github.com/jjdelc/1868136
+         */
+
+        $(function () {
+            $('#game_user').autocompleter({
+                // marker for autocomplete matches
+                highlightMatches: true,
+
+                // object to local or url to remote search
+                source: '{:U(user)}',
+
+                // custom template
+                template: '{{ label }} <span>({{ game }})</span>',
+
+                // show hint
+
+                // abort source if empty field
+                empty: false,
+
+                // max results
+                limit: 5,
+
+                callback: function (value, index, selected) {
+                    $("#uid").removeAttr('disabled');
+                    $("#uid").val(selected.id);
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function(){
+            laydate({
+                elem: '#date', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+
+            $('#form-admin-add').validationEngine();
+
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+
+            var flag=true;
+
+            $('#form-rule').submit(function () {
+                if ($(this).validationEngine('validate')){
+                    if (!flag){
+                        return false;
+                    }
+                    flag=false;
+                    $.post("",$(this).serialize(),function (result) {
+                        if(result.status==1){
+                            layer.alert(result.info,{icon:6},function () {
+                                parent.location.reload();
+                            })
+                        }else {
+                            layer.alert(result.info,{icon:5})
+                        }
+                        flag=true;
+                    },"json");
+                }
+                return false;
+            });
+        });
+    </script>
+
+</block>
