@@ -2,7 +2,7 @@
 return array(
     
     //扩展配置文件
-    'LOAD_EXT_CONFIG'=>'db,router',
+    'LOAD_EXT_CONFIG'=>'router',
     //
     'SALT'=>'中文加密',
 

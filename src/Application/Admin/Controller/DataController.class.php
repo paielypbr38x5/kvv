@@ -199,10 +199,7 @@ class DataController extends AdminBaseController
 
             $DataTable->returnJson();
         }
-
-        $data = D('DataView')->select();
-        dump($data);
-
+        
         $this->display('data-list');
     }
 

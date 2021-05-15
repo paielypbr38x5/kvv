@@ -1,51 +1,59 @@
-<extend name="./_base" />
+<extend name="./_base"/>
 
 <block name="css">
     <style>
-        html,body{
+        html, body {
             min-height: 100%;
             height: 100%;
 
         }
-        #logo h1{
+
+        #logo h1 {
             font-size: 80px;
-            padding-top: 80px;
+            padding: 60px;
             font-family: 微软雅黑;
             color: #666;
         }
-        .search{
+
+        .search {
             position: absolute;
-            top: 30%;
+            top: 200px;
             left: 0;
             right: 0;
         }
 
-        form .input-text{
+        #code-search .input-text {
             height: 50px;
             font-size: 24px;
         }
-        #search-btn{
+
+        #search-btn {
             height: 50px;
             width: 160px;
             font-size: 24px;
             transition: all .5s linear;
         }
-        #search-btn:hover{
+
+        #search-btn:hover {
             color: wheat;
         }
-        #save-list{
-            margin-top: 30px;
+
+        #save-list {
+            margin: 30px;
         }
-        #save-list li{
+
+        #save-list li {
             display: inline-block;
             margin: 0 20px;
         }
-        #save-list span{
+
+        #save-list span {
             font-size: 20px;
             line-height: 30px;
             width: 120px;
         }
-        #save-list span{
+
+        #save-list span {
             font-size: 20px;
             line-height: 30px;
             width: 100px;
@@ -59,39 +67,218 @@
     <div id="logo" class="text-c">
         <h1>K v v 指 数</h1>
     </div>
-        <div class="search">
 
-            <div class="text-c">
-                <form class="Huiform" method="post" action="" target="_self">
-                    <input type="text" class="input-text" style="width:480px" placeholder="请输入查询码" name="search">
-                    <button id="search-btn" type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> Kvv搜索</button>
-                </form>
-                <ul id="save-list">
-                    <li>
-                        <span class="label label-primary">123456</span>
-                    </li>
-                    <li>
-                        <span class="label label-success">123456</span>
-                    </li>
-                    <li>
-                        <span class="label label-danger">123456</span>
-                    </li>
-                </ul>
-            </div>
+    <div class="search container">
+
+        <div class="text-c">
+            <form id="code-search">
+                <input type="text" class="input-text" style="width:480px" placeholder="请输入查询码" name="search">
+                <button id="search-btn" type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i>
+                    Kvv搜索
+                </button>
+            </form>
+            <ul id="save-list">
+                <!--<li>-->
+                <!--<span class="label label-primary">123456</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<span class="label label-success">123456</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<span class="label label-danger">123456</span>-->
+                <!--</li>-->
+            </ul>
         </div>
-    <div class="container">
 
+        <div id="data-box">
+            <div class="cl pd-5 bg-1 bk-gray mt-20 mb-20">
+                <form id="data-search">
+
+                    <div class="col-md-1">
+                        <select class="formControls input-text" name="length">
+                            <option value="10">10 页</option>
+                            <option value="15">15 页</option>
+                            <option value="20">20 页</option>
+                            <option value="50">50 页</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <input id="start_time" class="formControls input-text"
+                               name="start_time"
+                               placeholder="开始时间"></div>
+                    <div class="form-group col-md-2">
+                        <input id="end_time" class="formControls input-text"
+                               name="end_time" placeholder="结束时间">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="submit" class="btn btn-primary" onclick="setMyDate('now')">本期</button>
+                        <button type="submit" class="btn btn-primary" onclick="setMyDate('prev')">上期</button>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <input class="formControls input-text" placeholder="搜索"
+                               name="search[value]"
+                               value=""></div>
+                    <div class="form-group col-md-2">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                        <button type="button" class="btn btn-warning">导出</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <table id="data-list" class="table table-border table-bordered table-bg">
+                <thead>
+                <tr class="text-c">
+
+                    <th>游戏</th>
+                    <th>日期</th>
+                    <th>销售总额</th>
+                    <th>销售笔数</th>
+                    <th>回收总额</th>
+                    <th>回收笔数</th>
+                    <th>小提示</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </block>
 
 <block name="script">
+    <script src="__PUBLIC__/Lib/datatables/js/jquery.dataTables.js"></script>
+
     <script type="text/javascript">
-        $(".search form").submit(function () {
+
+
+        laydate({
+            elem: '#start_time', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+        laydate({
+            elem: '#end_time', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+
+        var search = {};
+
+        var table;
+
+        $("#code-search").submit(function () {
             $("#logo").fadeOut();
             $(".search").animate({
-                "top":"10px"
+                "top": "10px"
             });
+            search.mask = $(this).find("input").val();
+
+            table = $('#data-list').dataTable({
+                order: [[1, 'desc']],
+                processing: true,
+                serverSide: true,
+                searching: false,
+                paging: false,
+                destroy: true,
+                ajax: {
+                    url: '',
+                    data: function (data) {
+                        return $.extend(data, search);
+                    }
+                },
+                columns: [
+                    {data: 'game'},
+                    {data: 'date'},
+                    {data: 'sell'},
+                    {data: 'sell_count'},
+                    {data: 'recycle'},
+                    {data: 'recycle_count'},
+                    {data: 'recycle_count'}
+                ],
+
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "未找到数据",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+
+                }
+            }).api();
             return false;
-        })
+        });
+        $("#data-search").submit(function () {
+            $("#logo").fadeOut();
+            $(".search").animate({
+                "top": "10px"
+            });
+            $.each($(this).serializeArray(), function (i, item) {
+                search[item.name] = item.value;
+            });
+            if(table){
+                table.draw();
+            }
+            return false;
+        });
+        function formatDate(d) {
+            var D = ['01', '02', '03', '04', '05', '06', '07', '08', '09','10'];
+            return d.getFullYear() + '-' + (d.getMonth() < 10 ?D[d.getMonth()]:d.getMonth()+1) + '-' + (d.getDate() < 10 ? D[d.getDate()-1] : d.getDate());
+        }
+        var d = new Date();
+
+        function setMyDate(type) {
+            var start_date;
+            var end_date;
+            var start=$('#start_time');
+            var end=$('#end_time');
+            switch (type) {
+                case 'now':
+                        d=new Date();
+                    end.val(formatDate(d));
+//                  计算本期开始时间
+                    start_date = parseInt(d.getDate() / 10) * 10 + 1;
+                    d.setDate(start_date);
+                    start.val(formatDate(d));
+
+                    break;
+                case 'prev':
+
+                    end_date = parseInt(d.getDate() / 10) * 10;
+
+                    d.setDate(end_date);
+
+                    end.val(formatDate(d));
+
+                    //计算上开始时间
+                    start_date = parseInt(d.getDate() / 10 -1) * 10+1;
+                        if (d.getDate()==28 || d.getDate()==29){
+                            start_date+=10;
+                        }
+
+
+                    d.setDate(start_date);
+
+                    start.val(formatDate(d));
+                    break;
+                default:
+                    break;
+            }
+        }
     </script>
 </block>
