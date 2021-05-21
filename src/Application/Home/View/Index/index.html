@@ -96,10 +96,11 @@
 
                     <div class="col-md-1">
                         <select class="formControls input-text" name="length">
-                            <option value="10">10 页</option>
-                            <option value="15">15 页</option>
-                            <option value="20">20 页</option>
-                            <option value="50">50 页</option>
+                            <option value="10">10 条</option>
+                            <option value="15">15 条</option>
+                            <option value="20">20 条</option>
+                            <option value="50">50 条</option>
+                            <option value="100">100 条</option>
                         </select>
                     </div>
 
@@ -122,23 +123,26 @@
                                value=""></div>
                     <div class="form-group col-md-2">
                         <button type="submit" class="btn btn-primary">搜索</button>
-                        <button type="button" class="btn btn-warning">导出</button>
+                        <button type="button" class="btn btn-warning" onclick="exportData()" onfocus="layer.tips('请先选择多少条后再进行导出')">导出</button>
                     </div>
 
                 </form>
             </div>
 
-            <table id="data-list" class="table table-border table-bordered table-bg">
+            <table id="data-list" class="table table-border table-bordered table-bg table-hover">
                 <thead>
                 <tr class="text-c">
 
+                    <th>游戏ID</th>
                     <th>游戏</th>
                     <th>日期</th>
                     <th>销售总额</th>
                     <th>销售笔数</th>
+                    <th>销售指数</th>
                     <th>回收总额</th>
                     <th>回收笔数</th>
-                    <th>小提示</th>
+                    <th>回收指数</th>
+                    <th>Kvv指数</th>
                 </tr>
                 </thead>
             </table>
@@ -150,7 +154,6 @@
     <script src="__PUBLIC__/Lib/datatables/js/jquery.dataTables.js"></script>
 
     <script type="text/javascript">
-
 
         laydate({
             elem: '#start_time', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
@@ -171,13 +174,15 @@
                 "top": "10px"
             });
             search.mask = $(this).find("input").val();
-
+           search.search={
+               value:search.mask
+           };
             table = $('#data-list').dataTable({
                 order: [[1, 'desc']],
                 processing: true,
                 serverSide: true,
                 searching: false,
-                paging: false,
+                lengthChange: false,
                 destroy: true,
                 ajax: {
                     url: '',
@@ -186,13 +191,43 @@
                     }
                 },
                 columns: [
+                    {data: 'game_user'},
                     {data: 'game'},
                     {data: 'date'},
                     {data: 'sell'},
                     {data: 'sell_count'},
+                    {data: 'sell_exp',
+                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
+                            $(cell).hover(function () {
+                                layer.tips(rowData.sell_info, cell);
+
+                            },function () {
+                                layer.closeAll();
+                            })
+                        }
+                    },
                     {data: 'recycle'},
                     {data: 'recycle_count'},
-                    {data: 'recycle_count'}
+                    {data: 'recycle_exp',
+                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
+                            $(cell).hover(function () {
+                                layer.tips(rowData.recycle_info, cell);
+
+                            },function () {
+                                layer.closeAll();
+                            })
+                        }
+                    },
+                    {data: 'count_exp',
+                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
+                            $(cell).hover(function () {
+                                layer.tips(rowData.count_info, cell);
+
+                            },function () {
+                                layer.closeAll();
+                            })
+                        }
+                    }
                 ],
 
                 language: {
@@ -232,6 +267,7 @@
                 search[item.name] = item.value;
             });
             if(table){
+                table.page.len(search.length);
                 table.draw();
             }
             return false;
@@ -280,5 +316,28 @@
                     break;
             }
         }
+
+        function exportData(){
+            var parseParam=function (param, key, encode) {
+                if(param==null) return '';
+                var paramStr = '';
+                var t = typeof (param);
+                if (t == 'string' || t == 'number' || t == 'boolean') {
+                    paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(param) : param);
+                } else {
+                    for (var i in param) {
+                        var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '[' + i+']');
+                        paramStr += parseParam(param[i], k, encode);
+                    }
+                }
+                return paramStr;
+            };
+
+            if (table){
+                window.open(table.ajax.url()+'?export=true'+parseParam(table.ajax.params()))
+
+            }
+        }
+
     </script>
 </block>
