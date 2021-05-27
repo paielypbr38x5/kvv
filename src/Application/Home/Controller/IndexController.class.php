@@ -32,10 +32,9 @@ class IndexController extends RestController
             $DataTable->lists();
 
             foreach ($DataTable->data as $i=>$item){
-                $DataTable->data[$i]['sell_exp']=$item['sell']/10000/$item['sell_count'];
-                $DataTable->data[$i]['recycle_exp']=$item['recycle']/10000/$item['recycle_count'];
-                $DataTable->data[$i]['count_exp']=$item['recycle_count']/$item['sell_count'];
-                $DataTable->data[$i]['info']='近期大客户较多，大客户不够稳定，在尽量稳定大客户的同时多发展小客户。';
+                $DataTable->data[$i]['sell_exp']=$item['sell']/165000000/$item['sell_count'];
+                $DataTable->data[$i]['recycle_exp']=$item['recycle']/180000000/$item['recycle_count'];
+                $DataTable->data[$i]['kvv_exp']=$item['recycle']/$item['sell'];
 
                 if ($DataTable->data[$i]['sell_exp']<60){
                     $DataTable->data[$i]['sell_info']='状态较为稳定，但要注意对客户的维护';
@@ -47,14 +46,14 @@ class IndexController extends RestController
                 if ($DataTable->data[$i]['recycle_exp']){
                     $DataTable->data[$i]['recycle_info']='正常';
                 }
-                if ($DataTable->data[$i]['count_exp']<0.1){
-                    $DataTable->data[$i]['count_info']='回收过少，记得提醒客户下分，养成对客户下分的习惯。';
+                if ($DataTable->data[$i]['kvv_exp']<0.1){
+                    $DataTable->data[$i]['kvv_info']='回收过少，记得提醒客户下分，养成对客户下分的习惯。';
                 }else if ($DataTable->data[$i]['count_exp']<0.15){
-                    $DataTable->data[$i]['count_info']='处于较为稳定阶段，最近请多寻找新客户';
+                    $DataTable->data[$i]['kvv_info']='处于较为稳定阶段，最近请多寻找新客户';
                 }else if($DataTable->data[$i]['count_exp']<0.2){
-                    $DataTable->data[$i]['count_info']='回收笔数正常';
+                    $DataTable->data[$i]['kvv_info']='回收笔数正常';
                 }else{
-                    $DataTable->data[$i]['count_info']='回收笔数过多';
+                    $DataTable->data[$i]['kvv_info']='回收笔数过多';
                 }
             }
             if (I('param.export')==true) {
@@ -63,8 +62,8 @@ class IndexController extends RestController
                 $DataTable->returnJson();
             }
         }
-        if ($_SERVER['HTTP_REFERER']!=='http://www.kvvgame.com/'){
-            exit();
+        if ($_SERVER['HTTP_REFERER']!=='http://192.168.0.9/admin.php/Data.html'){
+            exit('您没有权限访问');
         }
         $this->display();
     }

@@ -160,7 +160,7 @@
                     $.post("",$(this).serialize(),function (result) {
                         if(result.status==1){
                             layer.alert(result.info,{icon:6},function () {
-                                parent.location.reload();
+                                location.reload();
                             })
                         }else {
                             layer.alert(result.info,{icon:5})

@@ -138,11 +138,11 @@
                     <th>日期</th>
                     <th>销售总额</th>
                     <th>销售笔数</th>
-                    <th>销售指数</th>
+                    <th onmouseover="layer.tips('单笔销售金额',this)">销售指数</th>
                     <th>回收总额</th>
                     <th>回收笔数</th>
-                    <th>回收指数</th>
-                    <th>Kvv指数</th>
+                    <th onmouseover="layer.tips('单笔回收金额',this)">回收指数</th>
+                    <th onmouseover="layer.tips('回收率',this)">Kvv指数</th>
                 </tr>
                 </thead>
             </table>
@@ -204,29 +204,32 @@
                             },function () {
                                 layer.closeAll();
                             })
-                        }
+                        },
+                        orderable:false
                     },
                     {data: 'recycle'},
                     {data: 'recycle_count'},
                     {data: 'recycle_exp',
-                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
-                            $(cell).hover(function () {
-                                layer.tips(rowData.recycle_info, cell);
-
-                            },function () {
-                                layer.closeAll();
-                            })
-                        }
+//                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
+//                            $(cell).hover(function () {
+//                                layer.tips(rowData.recycle_info, cell);
+//
+//                            },function () {
+//                                layer.closeAll();
+//                            })
+//                        },
+                        orderable:false
                     },
-                    {data: 'count_exp',
+                    {data: 'kvv_exp',
                         "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
                             $(cell).hover(function () {
-                                layer.tips(rowData.count_info, cell);
+                                layer.tips(rowData.kvv_info, cell);
 
                             },function () {
                                 layer.closeAll();
                             })
-                        }
+                        },
+                        orderable:false
                     }
                 ],
 
