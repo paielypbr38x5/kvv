@@ -14,6 +14,7 @@ class DataTable
     public $filter;
     public $field=true;
     public $map;
+    public $ext; //扩展数据
     public $data;
 
     private $draw;
@@ -77,6 +78,7 @@ class DataTable
             'recordsFiltered'=>$this->recordsFiltered,
             'info'=>'获取成功',
             'data'=>$this->data,
+            'ext'=>$this->ext,
             'debug'=>$this->debug
         );
         header('Content-type: application/json');

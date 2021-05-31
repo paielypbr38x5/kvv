@@ -145,6 +145,12 @@
                     <th onmouseover="layer.tips('回收率',this)">Kvv指数</th>
                 </tr>
                 </thead>
+                <tbody></tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="10" class="c-red"></td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -177,7 +183,9 @@
            search.search={
                value:search.mask
            };
-            table = $('#data-list').dataTable({
+            table = $('#data-list').on('xhr.dt',function (e, settings, json, xhr) {
+                $(this).find("tfoot td").text(json.ext?(json.ext[0].kvv_exp?(json.ext.sell_info+json.ext.kvv_info):'暂无数据可供分析'):'选择时间段后可进行数据分析');
+            }).dataTable({
                 order: [[1, 'desc']],
                 processing: true,
                 serverSide: true,
@@ -197,6 +205,9 @@
                     {data: 'sell'},
                     {data: 'sell_count'},
                     {data: 'sell_exp',
+                        render:function (data) {
+                            return parseInt(data)+'元'
+                        },
                         "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
                             $(cell).hover(function () {
                                 layer.tips(rowData.sell_info, cell);
@@ -210,6 +221,9 @@
                     {data: 'recycle'},
                     {data: 'recycle_count'},
                     {data: 'recycle_exp',
+                        render:function (data) {
+                          return parseInt(data)+'元'
+                        },
 //                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
 //                            $(cell).hover(function () {
 //                                layer.tips(rowData.recycle_info, cell);

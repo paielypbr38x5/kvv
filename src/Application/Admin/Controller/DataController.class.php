@@ -1,10 +1,9 @@
 <?php
 namespace Admin\Controller;
 
-use Common\Controller\AdminBaseController;
 use Lib\DataTable;
 
-class DataController extends AdminBaseController
+class DataController extends AuthController
 {
     public function userList()
     {
