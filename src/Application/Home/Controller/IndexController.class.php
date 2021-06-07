@@ -29,11 +29,11 @@ class IndexController extends RestController
             }
             if (I('param.start_time') && I('param.end_time')){
                 $DataTable->map['date'] = array(array('egt', I('param.start_time')),array('elt', I('param.end_time')));
-                $DataTable->ext=D('Data')->where($DataTable->map)->field('sum(sell)/sum(sell_count)/16500 as sell_exp,sum(recycle)/sum(recycle_count)/16500 as recycle_exp,sum(recycle)/sum(sell) as kvv_exp')->select();
+                $DataTable->ext=D('Data')->where($DataTable->map)->field('sum(sell)/sum(sell_count)/16500 as sell_exp,sum(recycle)/sum(recycle_count)/16500 as recycle_exp,sum(recycle)/sum(sell) as kvv_exp')->find();
                 if ($DataTable->ext['sell_exp']<60){
-                    $DataTable->ext['sell_info']='状态较为稳定，但要注意对客户的维护';
+                    $DataTable->ext['sell_info']='状态较为稳定，但要注意对客户的维护。';
                 }else if ($DataTable->ext['sell_exp']<65){
-                    $DataTable->ext['sell_info']='比较稳定，潜力很大，也要注意进行客户的增加';
+                    $DataTable->ext['sell_info']='比较稳定，潜力很大，也要注意进行客户的增加。';
                 }else{
                     $DataTable->ext['sell_info']='大客户较多，大客户不够稳定，在尽量稳定大客户的同时多发展小客户。';
                 }
@@ -42,12 +42,12 @@ class IndexController extends RestController
                 }
                 if ($DataTable->ext['kvv_exp']<0.1){
                     $DataTable->ext['kvv_info']='回收过少，记得提醒客户下分，养成对客户下分的习惯。';
-                }else if ($DataTable->ext['count_exp']<0.15){
-                    $DataTable->ext['kvv_info']='处于较为稳定阶段，最近请多寻找新客户';
-                }else if($DataTable->ext['count_exp']<0.2){
-                    $DataTable->ext['kvv_info']='回收笔数正常';
+                }else if ($DataTable->ext['kvv_exp']<0.15){
+                    $DataTable->ext['kvv_info']='处于较为稳定阶段，最近请多寻找新客户。';
+                }else if($DataTable->ext['kvv_exp']<0.2){
+                    $DataTable->ext['kvv_info']='回收笔数正常。';
                 }else{
-                    $DataTable->ext['kvv_info']='回收笔数过多';
+                    $DataTable->ext['kvv_info']='回收笔数过多。';
                 }
 
             }
@@ -59,9 +59,9 @@ class IndexController extends RestController
                 $DataTable->data[$i]['kvv_exp']=$item['recycle']/$item['sell'];
 
                 if ($DataTable->data[$i]['sell_exp']<60){
-                    $DataTable->data[$i]['sell_info']='状态较为稳定，但要注意对客户的维护';
+                    $DataTable->data[$i]['sell_info']='状态较为稳定，但要注意对客户的维护。';
                 }else if ($DataTable->data[$i]['sell_exp']<65){
-                    $DataTable->data[$i]['sell_info']='比较稳定，潜力很大，也要注意进行客户的增加';
+                    $DataTable->data[$i]['sell_info']='比较稳定，潜力很大，也要注意进行客户的增加。';
                 }else{
                     $DataTable->data[$i]['sell_info']='大客户较多，大客户不够稳定，在尽量稳定大客户的同时多发展小客户。';
                 }
@@ -70,12 +70,12 @@ class IndexController extends RestController
                 }
                 if ($DataTable->data[$i]['kvv_exp']<0.1){
                     $DataTable->data[$i]['kvv_info']='回收过少，记得提醒客户下分，养成对客户下分的习惯。';
-                }else if ($DataTable->data[$i]['count_exp']<0.15){
-                    $DataTable->data[$i]['kvv_info']='处于较为稳定阶段，最近请多寻找新客户';
-                }else if($DataTable->data[$i]['count_exp']<0.2){
-                    $DataTable->data[$i]['kvv_info']='回收笔数正常';
+                }else if ($DataTable->data[$i]['kvv_exp']<0.15){
+                    $DataTable->data[$i]['kvv_info']='处于较为稳定阶段，最近请多寻找新客户。';
+                }else if($DataTable->data[$i]['kvv_exp']<0.2){
+                    $DataTable->data[$i]['kvv_info']='回收笔数正常。';
                 }else{
-                    $DataTable->data[$i]['kvv_info']='回收笔数过多';
+                    $DataTable->data[$i]['kvv_info']='回收笔数过多。';
                 }
             }
             if (I('param.export')==true) {

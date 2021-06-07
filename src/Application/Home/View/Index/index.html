@@ -184,7 +184,7 @@
                value:search.mask
            };
             table = $('#data-list').on('xhr.dt',function (e, settings, json, xhr) {
-                $(this).find("tfoot td").text(json.ext?(json.ext[0].kvv_exp?(json.ext.sell_info+json.ext.kvv_info):'暂无数据可供分析'):'选择时间段后可进行数据分析');
+                $(this).find("tfoot td").text(json.ext?(json.ext.kvv_exp?(json.ext.sell_info+json.ext.kvv_info):'暂无数据可供分析'):'选择时间段后可进行数据分析');
             }).dataTable({
                 order: [[1, 'desc']],
                 processing: true,
