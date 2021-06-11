@@ -29,7 +29,7 @@ class IndexController extends RestController
             }
             if (I('param.start_time') && I('param.end_time')){
                 $DataTable->map['date'] = array(array('egt', I('param.start_time')),array('elt', I('param.end_time')));
-                $DataTable->ext=D('Data')->where($DataTable->map)->field('sum(sell)/sum(sell_count)/16500 as sell_exp,sum(recycle)/sum(recycle_count)/16500 as recycle_exp,sum(recycle)/sum(sell) as kvv_exp')->find();
+                $DataTable->ext=D('DataView')->where($DataTable->map)->field('sum(sell)/sum(sell_count)/16500 as sell_exp,sum(recycle)/sum(recycle_count)/16500 as recycle_exp,sum(recycle)/sum(sell) as kvv_exp')->find();
                 if ($DataTable->ext['sell_exp']<60){
                     $DataTable->ext['sell_info']='状态较为稳定，但要注意对客户的维护。';
                 }else if ($DataTable->ext['sell_exp']<65){
