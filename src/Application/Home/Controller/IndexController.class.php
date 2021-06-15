@@ -45,9 +45,9 @@ class IndexController extends RestController
                 }else if ($DataTable->ext['kvv_exp']<0.15){
                     $DataTable->ext['kvv_info']='处于较为稳定阶段，最近请多寻找新客户。';
                 }else if($DataTable->ext['kvv_exp']<0.2){
-                    $DataTable->ext['kvv_info']='回收笔数正常。';
+                    $DataTable->ext['kvv_info']='回收数量正常。';
                 }else{
-                    $DataTable->ext['kvv_info']='回收笔数过多。';
+                    $DataTable->ext['kvv_info']='回收数量过多。';
                 }
 
             }
@@ -55,7 +55,9 @@ class IndexController extends RestController
 
             foreach ($DataTable->data as $i=>$item){
                 $DataTable->data[$i]['sell_exp']=$item['sell']/16500/$item['sell_count'];
+                $DataTable->data[$i]['sell_money']=$item['sell']/16500;
                 $DataTable->data[$i]['recycle_exp']=$item['recycle']/18000/$item['recycle_count'];
+                $DataTable->data[$i]['recycle_money']=$item['recycle']/18000;
                 $DataTable->data[$i]['kvv_exp']=$item['recycle']/$item['sell'];
 
                 if ($DataTable->data[$i]['sell_exp']<60){
@@ -73,9 +75,9 @@ class IndexController extends RestController
                 }else if ($DataTable->data[$i]['kvv_exp']<0.15){
                     $DataTable->data[$i]['kvv_info']='处于较为稳定阶段，最近请多寻找新客户。';
                 }else if($DataTable->data[$i]['kvv_exp']<0.2){
-                    $DataTable->data[$i]['kvv_info']='回收笔数正常。';
+                    $DataTable->data[$i]['kvv_info']='回收数量正常。';
                 }else{
-                    $DataTable->data[$i]['kvv_info']='回收笔数过多。';
+                    $DataTable->data[$i]['kvv_info']='回收数量过多。';
                 }
             }
             if (I('param.export')==true) {
@@ -120,7 +122,7 @@ class IndexController extends RestController
                     ->setCellValueExplicit('G' . $i, $item['recycle'])
                     ->setCellValueExplicit('H' . $i, $item['recycle_count'])
                     ->setCellValueExplicit('I' . $i, $item['recycle_exp'])
-                    ->setCellValueExplicit('J' . $i, $item['count_exp']);
+                    ->setCellValueExplicit('J' . $i, $item['kvv_exp']);
                 $i++;
             }
 

@@ -136,19 +136,21 @@
                     <th>游戏ID</th>
                     <th>游戏</th>
                     <th>日期</th>
-                    <th>销售总额</th>
+                    <th>销售总量</th>
+                    <th>销售金额</th>
                     <th>销售笔数</th>
-                    <th onmouseover="layer.tips('单笔销售金额',this)">销售指数</th>
-                    <th>回收总额</th>
+                    <th>单笔销售</th>
+                    <th>回收总量</th>
+                    <th>回收金额</th>
                     <th>回收笔数</th>
-                    <th onmouseover="layer.tips('单笔回收金额',this)">回收指数</th>
+                    <th>单笔回收</th>
                     <th onmouseover="layer.tips('回收率',this)">Kvv指数</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="10" class="c-red"></td>
+                    <td colspan="10" class="c-red" style="font-size: 18px;font-weight: bold"></td>
                 </tr>
                 </tfoot>
             </table>
@@ -203,6 +205,11 @@
                     {data: 'game'},
                     {data: 'date'},
                     {data: 'sell'},
+                    {data: 'sell_money',
+                        render:function(data){
+                            return Math.round(data*100)/100 + '元';
+                        }
+                    },
                     {data: 'sell_count'},
                     {data: 'sell_exp',
                         render:function (data) {
@@ -219,6 +226,11 @@
                         orderable:false
                     },
                     {data: 'recycle'},
+                    {data: 'recycle_money',
+                        render:function(data){
+                            return Math.round(data*100)/100 + '元';
+                        }
+                    },
                     {data: 'recycle_count'},
                     {data: 'recycle_exp',
                         render:function (data) {
@@ -242,6 +254,9 @@
                             },function () {
                                 layer.closeAll();
                             })
+                        },
+                        render:function(data){
+                            return Math.round(data*100)/100;
                         },
                         orderable:false
                     }
